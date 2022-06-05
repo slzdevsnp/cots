@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:vm="http://www.mulesoft.org/schema/mule/vm" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/vm http://www.mulesoft.org/schema/mule/vm/current/mule-vm.xsd">
+	<flow name="publish_message_aysnc_basic" doc:id="ff3a4405-ce36-453d-8d28-89199da5656b" >
+		<http:listener doc:name="http post" doc:id="66822024-e67c-427c-9839-c0cc4e096f74" config-ref="HTTP_Listener_config" path="/async-basic" allowedMethods="POST"/>
+		<logger level="INFO" doc:name="log start" doc:id="13c436f6-1788-453c-b382-06efecce980f" message='"befpre publishing to queue"'/>
+		<vm:publish queueName="queue.basic" doc:name="Publish  to queue async" doc:id="d93ece91-9446-4cf9-b357-928e6f20b60a" config-ref="VM_Config"/>
+		<logger level="INFO" doc:name="log end" doc:id="a3199606-79f8-4dcf-8084-0eae32bd5e3d" message="after publishing to queue"/>
+	</flow>
+	<flow name="listener_message_async_basic" doc:id="84229b1b-794d-4c37-8cf7-8600c86eff14" >
+		<vm:listener queueName="queue.basic" doc:name="queue basic listener" doc:id="230ba205-1cdc-4f07-b65c-0ffa94adc1e9" config-ref="VM_Config"/>
+		<flow-ref doc:name="Flow Reference" doc:id="c289f0f5-cedc-408d-83c6-b0b72121f39b" name="print_payload"/>
+	</flow>
+	<flow name="print_payload" doc:id="8c781a59-7a19-41d6-8c47-1bcaff3af236" >
+		<logger level="INFO" doc:name="Logger" doc:id="9eb30533-e104-4340-bd46-4cf9bb22116f" message="#[payload]"/>
+	</flow>
+</mule>
